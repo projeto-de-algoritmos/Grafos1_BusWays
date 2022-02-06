@@ -1,0 +1,48 @@
+#container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#container h1 {
+  font-size: 5.5rem;
+}
+
+#container-center {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #ffffFF;
+  border-radius: 8px;
+  box-shadow: 0 0 20px #FFF;
+}
+
+header {
+  height: 20rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-box {
+
+}
+
+#container-graph {
+  width: 80%;
+  background-color: rgba(174, 0, 255, 0.205);
+  /* background-image: url('../assets/city.jpeg');
+  background-position: center;
+  /* background-size: cover; */
+  margin-bottom: 10rem;
+  border-radius: 5px;
+  border: 0;
+  /* text-align: center; */
+}
