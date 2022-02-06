@@ -2,31 +2,31 @@ const fs = require("fs");
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-const base_url = 'https://deonibus.com';
+const baseUrl = 'https://deonibus.com';
 
 const scrapeData = async function () {
     const busWays = [];
 
     try {
-        const { data } = await axios.get(`${base_url}/rodoviaria`);
+        const { data } = await axios.get(`${baseUrl}/rodoviaria`);
         const $ = cheerio.load(data);
 
         const cities = $(".station.searchable-item");
         Promise.all(cities.map(async (_, city) => {
-            const city_url = $(city).attr("href");
-            const cityRoutes = await parseCityPage(city_url);
-            busWays.push(cityRoutes);
+            const cityUrl = $(city).attr("href");
+            const cityRoutes = await parseCityPage(cityUrl);
+            if (cityRoutes) busWays.push(cityRoutes);
         })).then(() => {
             saveJson(busWays);
         });
     } catch (err) {
-        console.log(err);
+        console.log(err.message);
     }
 }
 
-const parseCityPage = async function (city_url) {
+const parseCityPage = async function (cityUrl) {
     try {
-        const { data } = await axios.get(base_url + city_url);
+        const { data } = await axios.get(baseUrl + cityUrl);
         const $ = cheerio.load(data);
 
         const cityTrips = [];
@@ -44,7 +44,8 @@ const parseCityPage = async function (city_url) {
             "cityTrips": cityTrips,
         };
     } catch (err) {
-        console.log(err);
+        console.log(`Problema ao extrair ${baseUrl + cityUrl}`)
+        console.log(err.message);
     }
 }
 
