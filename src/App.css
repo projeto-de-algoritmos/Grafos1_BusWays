@@ -1,38 +1,103 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html {
+  /* 1rem = 10px, 10px(target)/16px(browser-default) = 62.5% */
+  font-size: 62.5%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body, input, button {
+  font-family: 'Poppins', 'Montserrat', sans-serif;
+  /* background-color: $#000; */
+  transition: background-color .3s;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+body, #root {
+  width: 100%;
+  background-color: #00000060;
 }
 
-.App-link {
-  color: #61dafb;
+button {
+  cursor: pointer;
+  /* font-size: 1.6rem; */
+  background: none;
+  border: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+h1, h2, h3, h4, h5 {
+  line-height: 1.5;
+  font-weight: 400;
+  font-family: 'Fredoka One', cursive;
+  color: rgba(255, 115, 0, 0.774);
+}
+
+strong {
+  /* color: #000; */
+}
+
+h1 {
+  font-size: 4.18rem;
+}
+
+h2 {
+  font-size: 3.484rem;
+}
+
+h3 {
+  font-size: 2.903rem;
+}
+
+h4 {
+  font-size: 2.419rem;
+}
+
+h5 {
+  font-size: 2.016rem;
+}
+
+p {
+  font-size: 1.6rem;
+  line-height: 1.75;
+  font-family: 'Poppins';
+  /* color: #000; */
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #F6F8FA;
 }
