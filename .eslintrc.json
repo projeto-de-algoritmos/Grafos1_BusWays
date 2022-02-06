@@ -35,6 +35,8 @@
       }
     ],
     "no-use-before-define": "off",
+    "no-unused-vars": "warn",
+    "class-methods-use-this": "off",
     "react/react-in-jsx-scope": "off"
   }
 }
