@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
 const fs = require('fs');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
 const baseUrl = 'https://deonibus.com';
+const busWaysGraph = {};
 let citiesCount = 0;
 let totalCities = 0;
 
@@ -19,14 +21,14 @@ const scrapeData = async () => {
     // const dataCities = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     for (const city of cities) {
-      await sleep(Math.floor(Math.random() * (4000 - 1000)) + 1000);
-      const cityUrl = $(city).attr('href');
-      busWays.push(await parseCityPage(cityUrl));
+      await sleep(Math.floor(Math.random() * 50));
+      const cityUrl = getCityUrl($, city);
+      await parseCityPage(cityUrl);
     }
   } catch (err) {
     console.log(err.message);
   } finally {
-    saveJson(busWays);
+    saveJson(busWaysGraph);
   }
 };
 
@@ -54,23 +56,24 @@ const parseCityPage = async cityUrl => {
       }!!\n** Total de cidade crawleadas: ${citiesCount} de ${totalCities}\n\n`,
     );
 
-    return {
-      originCity: getOriginCity($),
-      cityTrips,
-    };
+    const cityName = getOriginCity($);
+    busWaysGraph[cityName] = { cityName, cityUrl, cityTrips };
   } catch (err) {
     console.log(`PROBLEMA ao extrair ${baseUrl + cityUrl}`);
     console.log(`${err.message}\n`);
-    return {
-      originCityUrl: cityUrl,
-      cityTrips: [null],
-    };
   }
+};
+
+const getCityUrl = ($, citySelector) => {
+  let cityUrl = $(citySelector).attr('href');
+  cityUrl = cityUrl.replaceAll(/\.|'|\(|\)/g, '');
+  return cityUrl;
 };
 
 const getOriginCity = $ => {
   let originCity = $('#main-logo span').text();
   [, originCity] = originCity.match(/de (.+)/);
+  originCity = originCity.replace(/(.+)-(\w{2,3})$/, '$1 - $2');
   return originCity;
 };
 
@@ -80,20 +83,16 @@ const getDestinationCity = ($, routeSelector) => {
   return destinationCity;
 };
 
-const saveJson = busWays => {
-  fs.writeFile(
-    './src/data/data.json',
-    JSON.stringify(busWays, null, 2),
-    err => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      console.log(
-        'Crawler encerrado e resultado salvo no arquivo ./src/data/data.json!!',
-      );
-    },
-  );
+const saveJson = () => {
+  fs.writeFile('./src/data/data.json', JSON.stringify(busWaysGraph), err => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(
+      'Crawler encerrado e resultado salvo no arquivo ./src/data/data.json!!',
+    );
+  });
 };
 
 async function sleep(ms) {
