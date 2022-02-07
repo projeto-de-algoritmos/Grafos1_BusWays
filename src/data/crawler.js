@@ -1,74 +1,106 @@
-const fs = require("fs");
+const fs = require('fs');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
 const baseUrl = 'https://deonibus.com';
+let citiesCount = 0;
+let totalCities = 0;
 
-const scrapeData = async function () {
-    const busWays = [];
+const scrapeData = async () => {
+  console.log(`Começando a crawlear o site ${baseUrl}...\n`);
+  const busWays = [];
 
-    try {
-        const { data } = await axios.get(`${baseUrl}/rodoviaria`);
-        const $ = cheerio.load(data);
+  try {
+    const { data } = await axios.get(`${baseUrl}/rodoviaria`);
+    const $ = cheerio.load(data);
 
-        const cities = $(".station.searchable-item");
-        Promise.all(cities.map(async (_, city) => {
-            const cityUrl = $(city).attr("href");
-            const cityRoutes = await parseCityPage(cityUrl);
-            if (cityRoutes) busWays.push(cityRoutes);
-        })).then(() => {
-            saveJson(busWays);
-        });
-    } catch (err) {
-        console.log(err.message);
+    const cities = $('.station.searchable-item');
+    totalCities = cities.length;
+    // const dataCities = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    for (const city of cities) {
+      await sleep(Math.floor(Math.random() * (4000 - 1000)) + 1000);
+      const cityUrl = $(city).attr('href');
+      busWays.push(await parseCityPage(cityUrl));
     }
-}
+  } catch (err) {
+    console.log(err.message);
+  } finally {
+    saveJson(busWays);
+  }
+};
 
-const parseCityPage = async function (cityUrl) {
-    try {
-        const { data } = await axios.get(baseUrl + cityUrl);
-        const $ = cheerio.load(data);
+const parseCityPage = async cityUrl => {
+  try {
+    console.log(`Extraindo dados da url -> ${baseUrl + cityUrl}...`);
+    const { data } = await axios.get(baseUrl + cityUrl);
+    const $ = cheerio.load(data);
 
-        const cityTrips = [];
-        const routes = $(".routes.leaving a");
-        routes.map((_, route) => {
-            const trip = {
-                "destinationCity": getDestinationCity($, route),
-                "tripUrl": $(route).attr("href"),
-            }
-            cityTrips.push(trip);
-        });
-
-        return {
-            "originCity": getOriginCity($),
-            "cityTrips": cityTrips,
-        };
-    } catch (err) {
-        console.log(`Problema ao extrair ${baseUrl + cityUrl}`)
-        console.log(err.message);
-    }
-}
-
-const getOriginCity = function ($) {
-    let originCity = $("#main-logo span").text();
-    originCity = originCity.match(/de (.+)/)[1]
-    return originCity;
-}
-
-const getDestinationCity = function ($, routeSelector) {
-    let destinationCity = $(routeSelector).attr("title");
-    destinationCity = destinationCity.match(/para (.+)/)[1]
-    return destinationCity;
-}
-
-const saveJson = function (busWays) {
-    fs.writeFile("./src/data/data.json", JSON.stringify(busWays, null, 2), (err) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        console.log("Successfully written data to file");
+    const cityTrips = [];
+    const routes = $('.routes.leaving a');
+    routes.map((_, route) => {
+      const trip = {
+        destinationCity: getDestinationCity($, route),
+        tripUrl: $(route).attr('href'),
+      };
+      cityTrips.push(trip);
+      return route;
     });
+
+    citiesCount += 1;
+    console.log(
+      `Extraído com SUCESSO -> ${
+        baseUrl + cityUrl
+      }!!\n** Total de cidade crawleadas: ${citiesCount} de ${totalCities}\n\n`,
+    );
+
+    return {
+      originCity: getOriginCity($),
+      cityTrips,
+    };
+  } catch (err) {
+    console.log(`PROBLEMA ao extrair ${baseUrl + cityUrl}`);
+    console.log(`${err.message}\n`);
+    return {
+      originCityUrl: cityUrl,
+      cityTrips: [null],
+    };
+  }
+};
+
+const getOriginCity = $ => {
+  let originCity = $('#main-logo span').text();
+  [, originCity] = originCity.match(/de (.+)/);
+  return originCity;
+};
+
+const getDestinationCity = ($, routeSelector) => {
+  let destinationCity = $(routeSelector).attr('title');
+  [, destinationCity] = destinationCity.match(/para (.+)/);
+  return destinationCity;
+};
+
+const saveJson = busWays => {
+  fs.writeFile(
+    './src/data/data.json',
+    JSON.stringify(busWays, null, 2),
+    err => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(
+        'Crawler encerrado e resultado salvo no arquivo ./src/data/data.json!!',
+      );
+    },
+  );
+};
+
+async function sleep(ms) {
+  return new Promise(resolve => {
+    console.log(`Dando um timeout por ${ms} milissegundo(s)...`);
+    setTimeout(resolve, ms);
+  });
 }
 
 scrapeData();
