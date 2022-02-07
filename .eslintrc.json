@@ -24,6 +24,8 @@
     "prettier/prettier": "warn",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "no-await-in-loop": "off",
+    "no-restricted-syntax": "off",
     "react/jsx-filename-extension": [
       1,
       {
