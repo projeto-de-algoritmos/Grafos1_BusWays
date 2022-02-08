@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import CytoscapeComponent from 'react-cytoscapejs';
 import Select from 'react-select';
 // import Crawler from './data/crawler';
 
 import './styles/index.css';
+import data from './data/data.json';
 
 export default function App() {
+  const [citiesOptions, setCitiesOptions] = useState(
+    Object.keys(data).map((key, index) => ({ value: index, label: key })),
+  );
   const [width, setWidth] = useState('100%');
   const [height, setHeight] = useState(`400px`);
-  // Adding elements here
+
+  const [selectedOrigin, setSelectedOrigin] = useState('');
+  const [selectedDestiny, setSelectedDestiny] = useState('');
+
   const [graphData, setGraphData] = useState([
     // Node format
     { data: { id: '1', label: 'Node 1' } },
@@ -27,6 +34,13 @@ export default function App() {
     { data: { source: '6', target: '8', label: 'Edge from 6 to 8' } },
   ]);
 
+  useEffect(() => {
+    console.log({
+      origem: selectedOrigin,
+      destino: selectedDestiny,
+    });
+  }, [selectedOrigin, selectedDestiny]);
+
   return (
     <div id="container">
       <section id="container-center">
@@ -37,39 +51,46 @@ export default function App() {
               <strong>Origem</strong>
               {/* <input className="input-city" type="text" /> */}
               <Select
+                styles={{
+                  option: (provided, state) => ({
+                    ...provided,
+                    fontSize: '1.6rem',
+                  }),
+                }}
+                // value={selectedOrigin}
                 className="input-city"
                 classNamePrefix="input-city"
                 placeholder="Digite a cidade de origem..."
-                options={[
-                  { value: 1, label: 'Cidade 1' },
-                  { value: 2, label: 'Cidade 2' },
-                  { value: 3, label: 'Cidade 3' },
-                  { value: 4, label: 'Cidade 4' },
-                ]}
-                onChange={option =>
-                  console.log(`clicou na opção -> ORIGEM -> ${option.value}`)
-                }
+                options={citiesOptions}
+                onChange={option => setSelectedOrigin(option.label)}
               />
             </div>
             <div id="input-container">
               <strong>Destino</strong>
               {/* <input className="input-city" type="text" /> */}
               <Select
+                styles={{
+                  option: (provided, state) => ({
+                    ...provided,
+                    fontSize: '1.6rem',
+                  }),
+                }}
+                // value={selectedDestiny}
                 className="input-city"
                 classNamePrefix="input-city"
                 placeholder="Digite a cidade de destino..."
-                options={[
-                  { value: 1, label: 'Cidade 1' },
-                  { value: 2, label: 'Cidade 2' },
-                  { value: 3, label: 'Cidade 3' },
-                  { value: 4, label: 'Cidade 4' },
-                ]}
-                onChange={option =>
-                  console.log(`clicou na opção -> DESTINO -> ${option}`)
-                }
+                options={citiesOptions}
+                onChange={option => setSelectedDestiny(option.label)}
               />
             </div>
           </div>
+          <button
+            id="search-button"
+            type="button"
+            onClick={() => console.log('clicou')}
+          >
+            Buscar
+          </button>
         </header>
         <div id="container-graph">
           <CytoscapeComponent
@@ -120,7 +141,6 @@ export default function App() {
                   width: 30,
                   height: 30,
                   fontSize: 30,
-                  boxShadow: '0 0 15px #FFF',
                   shape: 'ellipse',
                 },
               },
