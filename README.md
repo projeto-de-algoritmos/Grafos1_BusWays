@@ -14,8 +14,14 @@ O objetivo do projeto é mostrar um caminho possível entre uma rodoviária e ou
 
 Para isso, foi contruído um crawler na pasta data para pegar as passagens disponíveis no site [De ônibus](https://deonibus.com/).
 
+## Link da apresentação
+
+[Apresentação](https://unbbr.sharepoint.com/sites/Pessoal909/Documentos%20Compartilhados/Forms/AllItems.aspx?id=%2Fsites%2FPessoal909%2FDocumentos%20Compartilhados%2FGeneral%2FRecordings%2FMeeting%20in%20%5FGeneral%5F%2D20220207%5F234657%2DMeeting%20Recording%2Emp4&parent=%2Fsites%2FPessoal909%2FDocumentos%20Compartilhados%2FGeneral%2FRecordings)
+
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+![Imagem 1](./src/assets/image1.png)
+![Imagem 2](./src/assets/image2.png)
+![Imagem 3](./src/assets/image3.png)
 
 ## Instalação
 **Linguagem**: JavaScript - Node v16.13.1<br>
