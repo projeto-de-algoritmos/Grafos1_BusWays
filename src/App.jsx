@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+
 import CytoscapeComponent from 'react-cytoscapejs';
+import Select from 'react-select';
 // import Crawler from './data/crawler';
 
 import './styles/index.css';
@@ -30,9 +32,43 @@ export default function App() {
       <section id="container-center">
         <header>
           <h1>BusWays</h1>
-          <div className="input-box">
-            <input className="input-city" type="text" />
-            <input className="input-city" type="text" />
+          <div className="inputs-box">
+            <div id="input-container">
+              <strong>Origem</strong>
+              {/* <input className="input-city" type="text" /> */}
+              <Select
+                className="input-city"
+                classNamePrefix="input-city"
+                placeholder="Digite a cidade de origem..."
+                options={[
+                  { value: 1, label: 'Cidade 1' },
+                  { value: 2, label: 'Cidade 2' },
+                  { value: 3, label: 'Cidade 3' },
+                  { value: 4, label: 'Cidade 4' },
+                ]}
+                onChange={option =>
+                  console.log(`clicou na opção -> ORIGEM -> ${option.value}`)
+                }
+              />
+            </div>
+            <div id="input-container">
+              <strong>Destino</strong>
+              {/* <input className="input-city" type="text" /> */}
+              <Select
+                className="input-city"
+                classNamePrefix="input-city"
+                placeholder="Digite a cidade de destino..."
+                options={[
+                  { value: 1, label: 'Cidade 1' },
+                  { value: 2, label: 'Cidade 2' },
+                  { value: 3, label: 'Cidade 3' },
+                  { value: 4, label: 'Cidade 4' },
+                ]}
+                onChange={option =>
+                  console.log(`clicou na opção -> DESTINO -> ${option}`)
+                }
+              />
+            </div>
           </div>
         </header>
         <div id="container-graph">
