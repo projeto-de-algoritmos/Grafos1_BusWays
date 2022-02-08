@@ -4,8 +4,10 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import Select from 'react-select';
 // import Crawler from './data/crawler';
 
-import './styles/index.css';
 import data from './data/data.json';
+import getAllPaths from './utils/graph';
+
+import './styles/index.css';
 
 export default function App() {
   const [citiesOptions, setCitiesOptions] = useState(
@@ -16,6 +18,7 @@ export default function App() {
 
   const [selectedOrigin, setSelectedOrigin] = useState('');
   const [selectedDestiny, setSelectedDestiny] = useState('');
+  const [path, setPath] = useState([]);
 
   const [graphData, setGraphData] = useState([
     // Node format
@@ -40,6 +43,13 @@ export default function App() {
       destino: selectedDestiny,
     });
   }, [selectedOrigin, selectedDestiny]);
+
+  const handleOnClick = e => {
+    console.log('clicou');
+    e.preventDefault();
+
+    setPath(getAllPaths(selectedOrigin, selectedDestiny));
+  };
 
   return (
     <div id="container">
@@ -84,16 +94,20 @@ export default function App() {
               />
             </div>
           </div>
-          <button
-            id="search-button"
-            type="button"
-            onClick={() => console.log('clicou')}
-          >
+          <button id="search-button" type="button" onClick={handleOnClick}>
             Buscar
           </button>
         </header>
         <div id="container-graph">
-          <CytoscapeComponent
+          {path.map((city, index) => (
+            <section id="city">
+              {path[index + 1] !== undefined && (
+                <h4>{`${city} para ${path[index + 1]}`}</h4>
+              )}
+              {/* <p>{'->'}</p> */}
+            </section>
+          ))}
+          {/* <CytoscapeComponent
             elements={graphData}
             style={{ width, height }}
             // adding a layout
@@ -155,7 +169,7 @@ export default function App() {
                 },
               },
             ]}
-          />
+          /> */}
         </div>
       </section>
     </div>

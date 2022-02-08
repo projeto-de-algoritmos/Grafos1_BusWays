@@ -58,6 +58,11 @@ header {
   margin-top: 2rem;
 }
 
+#city {
+  display: flex;
+  flex-direction: row;
+}
+
 #input-container {
   width: 40rem;
   display: flex;
@@ -85,10 +90,15 @@ header {
 
 #container-graph {
   width: 80%;
+  padding: 2rem;
   border: 10px double rgb(5, 229, 236);
   /* border: 10px double rgba(174, 0, 255, 0.205); */
   margin-bottom: 10rem;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   /* border: 0; */
 }
 

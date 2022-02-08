@@ -9,6 +9,8 @@ const getAllPaths = (startCity, endCity) => {
 
   currentPath.push(startCity);
   dfs(startCity, endCity, currentPath);
+
+  return path;
 };
 
 const dfs = (startCity, endCity, currentPath) => {
@@ -48,3 +50,5 @@ const hash = cityName => {
   }
   return hashNumber % primeNumberHash;
 };
+
+export default getAllPaths;
