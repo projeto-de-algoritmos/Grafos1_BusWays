@@ -12,6 +12,13 @@ const scrapeData = async () => {
   console.log(`Começando a crawlear o site ${baseUrl}...\n`);
   const busWays = [];
 
+  if (process.argv.length > 2) {
+    // console.log(`${baseUrl + process.argv[2]}`);
+    await parseCityPage(process.argv[2]);
+    saveJson(busWaysGraph);
+    return;
+  }
+
   try {
     const { data } = await axios.get(`${baseUrl}/rodoviaria`);
     const $ = cheerio.load(data);
@@ -66,7 +73,8 @@ const parseCityPage = async cityUrl => {
 
 const getCityUrl = ($, citySelector) => {
   let cityUrl = $(citySelector).attr('href');
-  cityUrl = cityUrl.replaceAll(/\.|'|\(|\)/g, '');
+  cityUrl = cityUrl.replaceAll(/\.|'|\(|\)/g, ''); // rodoviaria/barra---do-garcas
+  cityUrl = cityUrl.replaceAll(/[-]{2,}/g, '-');
   return cityUrl;
 };
 
@@ -84,15 +92,19 @@ const getDestinationCity = ($, routeSelector) => {
 };
 
 const saveJson = () => {
-  fs.writeFile('./src/data/data.json', JSON.stringify(busWaysGraph), err => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log(
-      'Crawler encerrado e resultado salvo no arquivo ./src/data/data.json!!',
-    );
-  });
+  fs.writeFile(
+    './src/data/data-GOIANIA.json',
+    JSON.stringify(busWaysGraph),
+    err => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(
+        'Crawler encerrado e resultado salvo no arquivo ./src/data/data.json!!',
+      );
+    },
+  );
 };
 
 async function sleep(ms) {
