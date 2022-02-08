@@ -23,7 +23,7 @@ const scrapeData = async () => {
     const { data } = await axios.get(`${baseUrl}/rodoviaria`);
     const $ = cheerio.load(data);
 
-    const cities = $('.station.searchable-item');
+    const cities = $('#tab-content-Centro-Oeste .station.searchable-item');
     totalCities = cities.length;
     // const dataCities = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
