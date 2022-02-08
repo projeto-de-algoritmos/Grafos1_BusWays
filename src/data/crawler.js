@@ -13,6 +13,7 @@ const scrapeData = async () => {
   const busWays = [];
 
   if (process.argv.length > 2) {
+    totalCities = 1;
     // console.log(`${baseUrl + process.argv[2]}`);
     await parseCityPage(process.argv[2]);
     saveJson(busWaysGraph);
@@ -93,7 +94,7 @@ const getDestinationCity = ($, routeSelector) => {
 
 const saveJson = () => {
   fs.writeFile(
-    './src/data/data-GOIANIA.json',
+    './src/data/data-exemplo.json',
     JSON.stringify(busWaysGraph),
     err => {
       if (err) {
@@ -101,7 +102,7 @@ const saveJson = () => {
         return;
       }
       console.log(
-        'Crawler encerrado e resultado salvo no arquivo ./src/data/data.json!!',
+        'Crawler encerrado e resultado salvo no arquivo ./src/data/data-exemplo.json!!',
       );
     },
   );
